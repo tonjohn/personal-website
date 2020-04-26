@@ -1,0 +1,21 @@
+CheckSpelling off
+Options +MultiViews
+Options +FollowSymLinks
+
+RewriteEngine On
+RewriteBase /
+
+RewriteRule    ^test$  portfolio.html
+RewriteRule    ^homepage.html$  index.html [R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*)/$ /$1 [L,R=301]
+
+RewriteRule    ^portfolio$  portfolio.html
+RewriteRule    ^home$  index.html
+RewriteRule    ^resume$  resume.html
+RewriteRule    ^homepage.html$  index.html [R=301]
+
+<Files "*.html">
+    ForceType text/html
+</Files>
