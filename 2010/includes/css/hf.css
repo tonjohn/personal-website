@@ -1,0 +1,82 @@
+#headerBar {
+	text-align:left;
+	margin:0;
+	padding:0;
+	background-color:#000000;
+	width:100%;
+	color:#545454;
+	font-family:tahoma, helvetica, arial, trebuchet ms, sans-serif;
+	font-size:10px;
+	height:73px;
+	background-image:url( '/img/v2/header_bg.gif' );
+	background-repeat:repeat-x;
+	position:relative;
+}
+
+#headerRight {
+	float:right;
+	width:196px;
+	height:50px;
+	margin:0;
+	padding:0;
+}
+
+#headerLeft {
+	width:253px;
+	height:50px;
+	margin:0;
+	padding:0;
+}
+
+#headerLinks {
+	position:absolute;
+	top:50px;
+	left:50px;
+	height:23px;
+	padding-top:3px;
+}
+
+a.headerLink,a.headerLink:active,a.headerLink:visited,a.headerLink:hover {
+	text-decoration:none;
+	color:#d7d7d7;
+}
+
+.headerLinkActive {
+	color:#ebebeb;
+	font-weight:bold;
+}
+
+#footer {
+	clear: both;
+	width: 100%;
+	height: 91px;
+	border-top: solid 1px #333333;
+	background: #000000  no-repeat 30px 30px;
+	text-align: left;
+}
+
+#footer select {
+	background-color: #808183;
+	border: 1px solid #44617A;
+	color: #232323;
+	font: 10px "MS Shell Dlg";
+	padding: 1px 0px 1px 4px;
+	margin: 20px 0 3px 152px;
+}
+
+#footer p {
+	margin: 42px 0 0 152px;
+	padding: 0;
+	font-size: 10px;
+	color: #666666;
+	width: 600px;
+}
+
+#footer p a {
+	font-weight: bold;
+	color: #44617A;
+}
+
+#footer p a:hover {
+	color: #FFFFFF;
+}
