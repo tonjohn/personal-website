@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<navgroups product="devtracker" master="true">
+
+	<navgroup phrase="devtracker" permissions="canadminforums" hr="true" displayorder="15">
+
+		<navoption displayorder="10">
+			<phrase>devtracker_manager</phrase>
+			<link>devtracker.php?do=modify</link>
+		</navoption>
+
+	</navgroup>
+
+</navgroups>

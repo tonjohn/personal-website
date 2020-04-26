@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="devtracker" active="1">
+	<title>DevTracker</title>
+	<description>Tracks posts made by certain users</description>
+	<version>1.1</version>
+	<url />
+	<versioncheckurl />
+	<dependencies>
+	</dependencies>
+	<codes>
+		<code version="1.1">
+			<installcode><![CDATA[$db->query_write('
+CREATE TABLE `' . TABLE_PREFIX . 'devtracker` (
+  `devtrackid` smallint(5) unsigned NOT NULL auto_increment,
+  `title` varchar(100) NOT NULL,
+  `usergroupids` text NOT NULL,
+  `tag` varchar(50) NOT NULL,
+  PRIMARY KEY  (`devtrackid`)
+) ENGINE=MyISAM;
+');]]></installcode>
+			<uninstallcode><![CDATA[$db->query_write('DROP TABLE ' . TABLE_PREFIX . 'devtracker');]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+		<template name="devtracker_results" templatetype="template" date="1220613934" username="SheepCow" version="1.0"><![CDATA[$stylevar[htmldoctype]
+<html xmlns="http://www.w3.org/1999/xhtml" dir="$stylevar[textdirection]" lang="$stylevar[languagecode]">
+<head>
+$headinclude
+<title>$vboptions[bbtitle] - $vbphrase[devtracker]</title>
+<if condition="$show['inlinemod']"><script type="text/javascript" src="clientscript/vbulletin_inlinemod.js?v=$vboptions[simpleversion]"></script></if>
+</head>
+<body>
+$header
+$navbar
+
+<if condition="$pagenav">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:3px">
+<tr valign="bottom">
+	<td align="$stylevar[right]">$pagenav</td>
+</tr>
+</table>
+</if>
+
+<form action="inlinemod.php?forumid=$forumid" method="post" id="inlinemodform">
+<input type="hidden" name="url" value="$url" />
+<input type="hidden" name="s" value="$session[sessionhash]" />
+<input type="hidden" name="securitytoken" value="$bbuserinfo[securitytoken]" />
+<input type="hidden" name="forumid" value="$forumid" />
+
+<table class="tborder" cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center" id="threadslist">
+<tr>
+	<td class="tcat" colspan="$threadcolspan" style="font-weight:normal">
+
+		<if condition="$show['inlinemod'] AND $search['showposts']"><input name="allbox" style="margin: 0px 0px 0px 5px; padding: 0px; float: $stylevar[right]; vertical-align: middle;" id="checkall_all" title="$vbphrase[check_uncheck_all]" onclick="inlineMod.check_all();" type="checkbox" /></if>
+		<span class="smallfont" style="float:$stylevar[right]">
+			<if condition="$show['results']">
+			<phrase 1="$first" 2="$last" 3="$numitems">$vbphrase[showing_results_x_to_y_of_z]</phrase>
+			<br />
+			</if>
+			<if condition="$show['generated']">
+			<phrase 1="$searchtime" 2="$searchminutes">$vbphrase[search_took_x_seconds_gen_y_mins]</phrase>
+			<else />
+			<phrase 1="$searchtime">$vbphrase[search_took_x_seconds]</phrase>
+			</if>
+		</span>
+
+		<strong>$vbphrase[devtracker]:</strong>
+		<span class="smallfont">$devgroup_name</span>
+	</td>
+</tr>
+
+$announcebits
+<tr>
+	<if condition="$show['threadicons']">
+		<td class="thead" colspan="2">&nbsp;</td>
+	<else />
+		<td class="thead">&nbsp;</td>
+	</if>
+	<td class="thead" width="75%">$vbphrase[thread] / $vbphrase[thread_starter]</td>
+	<td class="thead" width="150" align="center" nowrap="nowrap">$vbphrase[devtracker_dev]</td>
+	<td class="thead" width="25%">$vbphrase[forum]</td>
+
+	<if condition="$show['inlinemod']">
+		<if condition="$show['popups']">
+			<td class="vbmenu_control" id="imod" align="center" title="$vbphrase[moderation]"> <script type="text/javascript"> vbmenu_register('imod'); </script> </td>
+		<else />
+			<td class="thead" align="center">
+				<input type="checkbox" name="allbox" id="checkall_all" title="$vbphrase[check_uncheck_all]" onclick="inlineMod.check_all()" />
+			</td>
+		</if>
+
+
+	</if>
+
+</tr>
+
+<if condition="!$show['results']">
+	<!-- show no posts message -->
+	<tr>
+		<td class="alt1" colspan="$threadcolspan" align="center">
+			<div style="padding: 16px">
+				<strong>$vbphrase[devtracker_no_posts]</strong>
+			</div>
+		</td>
+	</tr>
+	<!-- end show no posts message -->
+<else />
+$searchbits
+</if>
+
+
+<tr>
+	<td class="tfoot" colspan="$threadcolspan" align="$stylevar[right]">
+		<if condition="$show['results']">
+		<span class="smallfont"><phrase 1="$first" 2="$last" 3="$numitems">$vbphrase[showing_results_x_to_y_of_z]</phrase></span>
+		<else />
+		&nbsp;
+		</if>
+	</td>
+</tr>
+</table>
+
+<if condition="$pagenav">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:3px">
+<tr valign="top">
+	<if condition="$pagenav"><td align="$stylevar[right]">$pagenav</td></if>
+</tr>
+</table>
+</if>
+
+<if condition="$show['inlinemod']">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:3px">
+<tr valign="top">
+	<td align="$stylevar[right]">
+		<div class="smallfont" style="text-align:$stylevar[left]; white-space:nowrap; float:$stylevar[right]">
+		<strong>$vbphrase[moderation]</strong><br />
+		<if condition="!$search['showposts']">
+			<select name="do">
+				<if condition="$show['deletethread'] OR $show['spamctrls'] OR $show['openthread'] OR $show['approvethread'] OR $show['movethread'] OR $template_hook['inlinemod_thread_bottom']">
+				<optgroup label="$vbphrase[option]">
+
+					<if condition="$show['deletethread']">
+					<option value="deletethread">$vbphrase[delete_threads]</option>
+					<option value="undeletethread">$vbphrase[undelete_threads]</option>
+					</if>
+
+					<if condition="$show['spamctrls']">
+					<option value="spamthread">$vbphrase[delete_threads_as_spam]</option>
+					</if>
+
+					<if condition="$show['openthread']">
+					<option value="open">$vbphrase[open_threads]</option>
+					<option value="close">$vbphrase[close_threads]</option>
+					</if>
+
+					<if condition="$show['approvethread']">
+					<option value="approvethread">$vbphrase[approve_threads]</option>
+					<option value="unapprovethread">$vbphrase[unapprove_threads]</option>
+					</if>
+
+					<if condition="$show['movethread']">
+					<option value="stick">$vbphrase[stick_threads]</option>
+					<option value="unstick">$vbphrase[unstick_threads]</option>
+					<option value="movethread">$vbphrase[move_threads]</option>
+					<option value="mergethread">$vbphrase[merge_threads]</option>
+					</if>
+
+					$template_hook[inlinemod_thread_bottom]
+				</optgroup>
+				</if>
+				<optgroup label="____________________">
+					<option value="viewthread">$vbphrase[view_selected_threads]</option>
+					<option value="clearthread">$vbphrase[clear_thread_list]</option>
+				</optgroup>
+			</select><input type="submit" class="button" id="inlinego" value="$vbphrase[go]" />
+			<script type="text/javascript">
+			<!--
+			inlineMod = new vB_Inline_Mod('inlineMod', 'thread', 'inlinemodform', '$vbphrase[go_x]');
+			//-->
+			</script>
+		<else />
+			<select name="do">
+				<optgroup label="$vbphrase[option]">
+					<if condition="$show['managethread']">
+					<option value="mergeposts">$vbphrase[merge_posts]</option>
+					<option value="moveposts">$vbphrase[move_posts]</option>
+					<option value="copyposts">$vbphrase[copy_posts]</option>
+					</if>
+
+					<if condition="$show['spamctrls']">
+					<option value="spampost">$vbphrase[delete_posts_as_spam]</option>
+					</if>
+
+					<if condition="$show['managepost']">
+					<option value="deleteposts">$vbphrase[delete_posts]</option>
+					<option value="undeleteposts">$vbphrase[undelete_posts]</option>
+					</if>
+
+					<if condition="$show['approvepost']">
+					<option value="approveposts">$vbphrase[approve_posts]</option>
+					<option value="unapproveposts">$vbphrase[unapprove_posts]</option>
+					</if>
+
+					<if condition="$show['approveattachment']">
+					<option value="approveattachments">$vbphrase[approve_attachments]</option>
+					<option value="unapproveattachments">$vbphrase[unapprove_attachments]</option>
+					</if>
+
+					$template_hook[inlinemod_post_bottom]
+				</optgroup>
+				<optgroup label="____________________">
+					<option value="viewpost">$vbphrase[view_selected_posts]</option>
+					<option value="clearpost">$vbphrase[clear_post_list]</option>
+				</optgroup>
+			</select><input type="submit" class="button" id="inlinego" value="$vbphrase[go]" />
+			<script type="text/javascript">
+			<!--
+			inlineMod = new vB_Inline_Mod('inlineMod', 'post', 'inlinemodform', '$vbphrase[go_x]');
+			//-->
+			</script>
+		</if>
+		</div>
+	</td>
+</tr>
+</table>
+</if>
+
+</form>
+
+<br />
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr>
+	<td width="100%">&nbsp;</td>
+	<td>$forumjump</td>
+</tr>
+</table>
+
+<if condition="$show['inlinemod'] AND $show['popups']">
+	<div class="vbmenu_popup" id="imod_menu" style="display:none" align="$stylevar[left]">
+		$threadadmin_imod_menu
+	</div>
+</if>
+
+$footer
+
+</body>
+</html>]]></template>
+		<template name="devtracker_threadbit" templatetype="template" date="1220613942" username="SheepCow" version="1.0"><![CDATA[<tr>
+	<td class="alt1" id="td_threadstatusicon_$thread[realthreadid]">
+		$thread[openclose_editable]
+		<img src="$stylevar[imgdir_statusicon]/thread$thread[statusicon].gif" id="thread_statusicon_$thread[realthreadid]" alt="<if condition="$show['threadcount']"><phrase 1="$thread[dot_count]" 2="$thread[dot_lastpost]">$vbphrase[have_x_posts_in_thread_last_y]</phrase></if>" border="" />
+	</td>
+	<if condition="$show['threadicons']">
+		<td class="alt2"><if condition="$show['threadicon']"><img src="$thread[threadiconpath]" alt="$thread[threadicontitle]" border="0" /><else />&nbsp;</if></td>
+	</if>
+
+	<td class="alt1" id="td_threadtitle_$thread[realthreadid]" title="$thread[preview]">
+
+		$thread[title_editable]
+		<div>
+			$thread[movedprefix]
+			$thread[typeprefix]
+			$thread[moderatedprefix]
+			$thread[prefix_rich]
+			<a href="showthread.php?$session[sessionurl]p=$thread[dev_postid]#post$thread[dev_postid]" id="thread_title_$thread[realthreadid]">$thread[threadtitle]</a>
+		</div>
+	</td>
+
+	<if condition="$show['threadmoved']">
+	<td class="alt2" align="center">-</td>
+	<else />
+	<td class="alt2">
+		<div class="smallfont" style="text-align:$stylevar[right]; white-space:nowrap">
+			$thread[postdate] <if condition="!$show['detailedtime']"><span class="time">$thread[posttime]</span></if><br />
+			<phrase 1="member.php?$session[sessionurl]u=$thread[dev_userid]" 2="$thread[dev_lastposter]">$vbphrase[by_x]</phrase>
+		</div>
+	</td>
+	</if>
+
+	<if condition="$show['forumlink']">
+		<td class="alt1"><a href="forumdisplay.php?$session[sessionurl]f=$thread[forumid]">$thread[forumtitle]</a></td>
+	</if>
+
+	<if condition="$show['inlinemod']">
+		<td class="<if condition="$show['forumlink']">alt2<else />alt1</if>">
+			<input type="checkbox" name="tlist[$thread[realthreadid]]" id="tlist_$thread[realthreadid]" value="$thread[checkbox_value]" <if condition="$show['disabled']">disabled="disabled"</if> />
+		</td>
+	</if>
+</tr>]]></template>
+	</templates>
+	<plugins>
+	</plugins>
+	<phrases>
+		<phrasetype name="Control Panel Home Pages" fieldname="cphome">
+			<phrase name="devtracker_manager" date="1222554524" username="SheepCow" version="1.0"><![CDATA[DevTracker Manager]]></phrase>
+		</phrasetype>
+		<phrasetype name="Error Messages" fieldname="error">
+			<phrase name="devtracker_error_nodevgroup" date="1222553814" username="SheepCow" version="1.0"><![CDATA[The group you are attempting to view could not be found.]]></phrase>
+		</phrasetype>
+		<phrasetype name="GLOBAL" fieldname="global">
+			<phrase name="devtracker" date="1220607648" username="SheepCow" version="1.0"><![CDATA[DevTracker]]></phrase>
+			<phrase name="devtracker_dev" date="1220610374" username="SheepCow" version="1.0"><![CDATA[Developer Post]]></phrase>
+			<phrase name="devtracker_no_posts" date="1220608372" username="SheepCow" version="1.0"><![CDATA[The developers have not made any posts]]></phrase>
+		</phrasetype>
+		<phrasetype name="vBulletin Settings" fieldname="vbsettings">
+			<phrase name="setting_devtracker_cachetime_desc" date="1222554370" username="SheepCow" version="1.0"><![CDATA[Only use the cache if it was created in the last x minutes.]]></phrase>
+			<phrase name="setting_devtracker_cachetime_title" date="1222554370" username="SheepCow" version="1.0"><![CDATA[Cache Time]]></phrase>
+			<phrase name="setting_devtracker_usecache_desc" date="1222553397" username="SheepCow" version="1.0"><![CDATA[Should the DevTracker use the vBulletin search cache?]]></phrase>
+			<phrase name="setting_devtracker_usecache_title" date="1222553397" username="SheepCow" version="1.0"><![CDATA[Use Cache]]></phrase>
+			<phrase name="settinggroup_devtracker" date="1222553348" username="SheepCow" version="1.0"><![CDATA[DevTracker]]></phrase>
+			<phrase name="settinggroup_devtracker_usecache" date="1222553173" username="SheepCow" version="1.0"><![CDATA[devtracker_usecache]]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+		<settinggroup name="devtracker" displayorder="590">
+			<setting varname="devtracker_usecache" displayorder="10">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="devtracker_cachetime" displayorder="20">
+				<datatype>posint</datatype>
+				<defaultvalue>15</defaultvalue>
+			</setting>
+		</settinggroup>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>

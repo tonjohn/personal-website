@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--- Start Head --->
+<head>
+	<title>Home - Bella Bisa Designs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta name="ROBOTS" content="ALL">
+	<meta name="DESCRIPTION" content="Bella Bisa Designs, LLC">
+	<meta name="KEYWORDS" content="Bella Bisa Designs">
+
+	<meta name="AUTHOR" content="Bella Bisa Designs, LLC">
+	<link rel="stylesheet" type="text/css" href="bellabisa.css">
+ 
+  <!--- <link rel="icon" 
+      type="image/gif" 
+      href="img/steam.gif" /> --->
+	  	  
+</head>
+<!--- End Head --->
+
+<body>
+
+<!--- Start Header --->
+
+<!--- End Header --->
+
+<div id="wrapper">
+
+<h1 style="padding-bottom: 8px;">Bella Bisa Designs</h1>
+<img class="roundedcorners" src="http://sphotos.ak.fbcdn.net/hphotos-ak-ash2/hs070.ash2/36864_630025806259_18806965_36543639_1402125_n.jpg" alt="Bella Bisa Designs, LLC"/>
+<h3>Coming Soon!</h4>
+
+</div> <!-- close wrapper -->
+
+<!-- Start Footer -->
+<!-- End Footer -->
+
+</center>
+</body>
+</html>

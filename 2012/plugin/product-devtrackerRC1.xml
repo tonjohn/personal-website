@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="devtracker" active="1">
+	<title>Dev Tracker</title>
+	<description><![CDATA[Tracks developer's posts in threads]]></description>
+	<version>1.0</version>
+	<url>http://www.steampowered.com</url>
+	<versioncheckurl />
+	<dependencies>
+		<dependency dependencytype="vbulletin" minversion="3.8.6" maxversion="" />
+	</dependencies>
+	<codes>
+		<code version="1.0">
+			<installcode><![CDATA[if (!function_exists('table_exists')) 
+	{
+		function table_exists($table)
+		{
+			global $db;
+			return ($db->num_rows($db->query_read("SHOW TABLES LIKE '" . TABLE_PREFIX .$table."'")) > 0);
+		}
+	}
+	
+	if (!function_exists('field_exists')) 
+	{	
+		function field_exists($table, $field)
+		{
+			global $db;
+			return ($db->num_rows($db->query_read("SHOW COLUMNS FROM `" . TABLE_PREFIX .$table."` LIKE '".$field."'"))> 0);
+		}
+	}
+	
+	if (!field_exists('thread','devreplycount'))
+	{
+		$db->query_write("ALTER TABLE `" . TABLE_PREFIX . "thread` ADD devreplycount INT( 10 ) UNSIGNED NOT NULL DEFAULT 0");
+	}
+	
+	
+	
+	// Rebuild Bitfields
+		require_once(DIR . '/includes/class_bitfield_builder.php');
+		vB_Bitfield_Builder::save($db);
+		build_forum_permissions();]]></installcode>
+			<uninstallcode><![CDATA[if (!function_exists('table_exists')) 
+	{
+		function table_exists($table)
+		{
+			global $db;
+			return ($db->num_rows($db->query_read("SHOW TABLES LIKE '" . TABLE_PREFIX .$table."'")) > 0);
+		}
+	}
+	
+	if (!function_exists('field_exists')) 
+	{	
+		function field_exists($table, $field)
+		{
+			global $db;
+			return ($db->num_rows($db->query_read("SHOW COLUMNS FROM `" . TABLE_PREFIX .$table."` LIKE '".$field."'"))> 0);
+		}
+	}
+	
+	
+	if (field_exists('thread','devreplycount'))
+	{
+	$db->query_write("ALTER TABLE `".TABLE_PREFIX."thread` DROP devreplycount");
+	}
+	
+	// Rebuild Bitfields
+		require_once(DIR . '/includes/class_bitfield_builder.php');
+		vB_Bitfield_Builder::save($db);
+		build_forum_permissions();]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+	</templates>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title>delete_devreplycount</title>
+			<hookname>editpost_delete_complete</hookname>
+			<phpcode><![CDATA[if (is_member_of($postinfo, 6) && $threadinfo['devreplycount'] > 0)
+{
+	$temp = mysql_escape_string($threadinfo['threadid']);
+    $vbulletin->db->query("UPDATE " . TABLE_PREFIX . "thread SET devreplycount=devreplycount-1 WHERE threadid=$temp");
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>devreplycount forum display query</title>
+			<hookname>forumdisplay_query</hookname>
+			<phpcode><![CDATA[$hook_query_fields .= ", thread.devreplycount";]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>inlinemod delete devreply</title>
+			<hookname>inlinemod_dodeleteposts</hookname>
+			<phpcode><![CDATA[$devreplies = fetch_threadinfo($post['threadid']);
+$devreplies = $devreplies['devreplycount'];	  
+	  
+foreach ($postarray AS $postid => $post)
+{
+
+	$deluserid = fetch_userinfo($post['posteruserid']);
+
+
+	if (is_member_of($deluserid, 6) && $devreplies > 0)
+	{
+		$devreplies--;
+		$temp = mysql_escape_string($post['threadid']);
+		$vbulletin->db->query("UPDATE " . TABLE_PREFIX . "thread SET devreplycount=devreplycount-1 WHERE threadid=$temp");
+	}
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>do whodevposted</title>
+			<hookname>misc_start</hookname>
+			<phpcode><![CDATA[include('./devtracker/whodevposted.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>update_devreplycount</title>
+			<hookname>newpost_process</hookname>
+			<phpcode><![CDATA[############################### start update_devreplycount ###############################
+// hooks into "newpost_process" via the plugin interface in the AdminCP
+if ($vbulletin->userinfo['usergroupid'] == '6'){
+    $temp = mysql_escape_string($threadinfo['threadid']);
+    $vbulletin->db->query("UPDATE " . TABLE_PREFIX . "thread SET devreplycount=devreplycount+1 WHERE threadid=$temp LIMIT 1");
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>update_devreplycount new thread</title>
+			<hookname>newthread_post_complete</hookname>
+			<phpcode><![CDATA[############################### start update_devreplycount ###############################
+// hooks into "newthread_post_complete" via the plugin interface in the AdminCP
+if ($vbulletin->userinfo['usergroupid'] == '6'){
+    $temp = mysql_escape_string($newpost['threadid']);
+    $vbulletin->db->query("UPDATE " . TABLE_PREFIX . "thread SET devreplycount=devreplycount+1 WHERE threadid=$temp LIMIT 1");
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>
