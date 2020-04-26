@@ -1,0 +1,198 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+    <style>
+        :root {
+            --main-bg-color: brown;
+            --ada-green: #339933;
+            --ada-blue: #5176b5;
+            --ada-light-blue: #a9bdd5;
+            --ada-white: #fbfbfb;
+        }
+
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100%;
+            background: #ffffff;
+            font-family: open_sanslight, sans-serif;
+        }
+
+        /* Mobile */
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 1fr;
+            grid-template-areas: "header header" "nav nav" "main main" "sidebar sidebar" "footer footer";
+            grid-gap: 15px;
+            /* max-width: 960px; */
+            margin: 0 auto;
+        }
+
+        /* Desktop */
+
+        @media only screen and (min-width: 769px) {
+            .wrapper {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: 1fr;
+                grid-template-areas: "header header header header header" "nav nav nav nav nav" ". main main main ." "footer footer footer footer footer";
+                grid-gap: 15px;
+                /* max-width: 960px; */
+                margin: 0 auto;
+            }
+        }
+
+        /* Header START */
+
+        header {
+            grid-area: header;
+
+            background: var(--ada-green);
+            color: #fff;
+            min-height: 80px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0px 160px;
+            font-weight: 300;
+
+        }
+
+        header h2,
+        header h3 {
+            font-weight: 300;
+        }
+
+        hr {
+            color: #fff;
+            border-color: #fff;
+            border-top: none;
+            margin: 2px 0;
+        }
+
+        .header__link--account {
+            align-self: center;
+        }
+
+        .header__title {
+            display: inline-block;
+            align-self: center;
+            margin-left: 20px;
+        }
+
+        .header__logoContainer {
+            align-self: flex-end;
+            display: flex;
+        }
+
+        .header__logo {
+            display: inline-block;
+            margin-bottom: -2px;
+        }
+
+        .header__link {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.5s ease;
+        }
+
+        .header__link:hover {
+            color: #ffcda4;
+        }
+
+        /* header END */
+
+        /* nav START */
+
+        nav {
+            grid-area: nav;
+
+            background: var(--ada-blue);
+        }
+
+
+        /* Main */
+
+        main {
+            grid-area: main;
+
+            background: var(--ada-light-blue);
+        }
+
+        /* Footer */
+
+        footer {
+            grid-area: footer;
+
+            background: var(--main-bg-color);
+        }
+    </style>
+</head>
+
+<body class="wrapper">
+    <header>
+        <div class="header__logoContainer">
+            <img class="header__logo" src="images/ada_logo.png" />
+            <div class="header__title">
+                <h2>Continuing Education</h2>
+                <hr/>
+                <h3>American Dental Association</h3>
+            </div>
+        </div>
+
+
+        <a class="header__link header__link--account" href="#">My Account</a>
+    </header>
+    <nav>
+        <a class="nav__link">Courses &or;</a>
+        <a class="nav__link">About</a>
+        <a class="nav__link">Membership</a>
+        <a class="nav__link">Contact Us</a>
+    </nav>
+    <main>
+        <div class="hero">
+            <div class="hero__searchContainer">
+                <div class="">
+                    <label for="search_query" class="sr-only">Search for courses...</label>
+                    <input name="search_query" placeholder="Search for courses..." type="text" class="hero__input">
+                    <i class="fas fa-search"></i>
+                </div>
+                <!---->
+                <button type="submit" name="button" id="search_submit" class="sr-only">Search</button>
+            </div>
+        </div>
+        <div class="featuredCourses">
+
+        </div>
+        <div class="courseCategories">
+
+        </div>
+
+    </main>
+    <footer>
+        <div class="footer">
+            <h3> Some stuff here</h3>
+        </div>
+        <div class="footerNaviation">
+            <h3>More stuff here</h3>
+        </div>
+
+    </footer>
+</body>
+
+</html>
